@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Super Sprinter 3000</title>
+</head>
+	<style>
+table {word-wrap: break-word;
+table-layout: fixed;
+width: 620px;
+}
+
+/table, th, td {
+  border: 1px solid black;
+}
+
+th {
+  text-align: left;
+}
+
+td {padding: 5px;text-align: left;}
+
+	</style>
+<body>
+<h1>Super Sprinter 3000</h1>
+<p><a href="/story">Add new User Story</a></p>
+    <p>
+        <table>
+        <tr>
+            <th>id</th>
+            <th>Story Title</th>
+            <th>User Story</th>
+            <th>Acceptance criteria</th>
+            <th>Business value</th>
+            <th>Estimation</th>
+            <th>Status</th>
+
+        {% for row in range(the_len) %}
+        </tr>
+            <td>{{ table[row][0] }}</td>
+            <td><a href="story/{{ table[row][0] }}">{{ table[row][1] }}</a></td>
+            <td>{{ table[row][2] }}</td>
+            <td>{{ table[row][3] }}</td>
+            <td>{{ table[row][4] }}</td>
+            <td>{{ table[row][5] }}</td>
+    </tr>
+    {% endfor %}
+
+
+        </table>
+    </p>
+</body>
+</html>
