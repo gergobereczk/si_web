@@ -17,13 +17,30 @@ def get_table_from_file(file_name):
 
 table = get_table_from_file("data.csv")
 
-@app.route('/story/<thekey>')
+@app.route('/story/<thekey>', methods=["GET", "POST"])
 def show_user_profile(thekey):
-    print ("!!!!!!!!!!!!!!!megvan,az upddaet!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!44")
-    table = get_table_from_file("data.csv")
-    print(table[(int(thekey)+1)][1])
+    if request.method == "POST":
+        table = get_table_from_file("data.csv")
+        table[((int(thekey))+1)][1]= request.form["story_title"]
+        table[((int(thekey)) + 1)][2] = request.form["user_story"]
+        table[((int(thekey)) + 1)][3] = request.form["acceptance_criteria"]
+        table[((int(thekey)) + 1)][4] = request.form["bussiness_value"]
+        table[((int(thekey)) + 1)][5] = request.form["estimation"]
+        table[((int(thekey)) + 1)][6] = request.form["status"]
 
-    return ("megvan",thekey)
+
+        with open("data.csv", "w") as csv_file:
+            csv_writer=csv.writer(csv_file, delimiter=",")
+
+            for line in table:
+                csv_writer.writerow(line)
+
+        return redirect('/')
+    else:
+        table = get_table_from_file("data.csv")
+        update_number = (int(thekey)+1)
+
+        return render_template('story1.html', table=table, update_number=update_number)
 
 
 
@@ -32,9 +49,9 @@ def route_home():
     table = get_table_from_file("data.csv")
     del table[0]
     the_len = (len(table))
-    print ("kkkk")
-    print (the_len)
     return render_template("list.html", table=table,the_len=the_len)
+
+
 @app.route('/list')
 def route_list():
     user_stories = data_handler.get_all_user_story()
@@ -45,30 +62,28 @@ def route_list():
 def route_story():
     if request.method == "POST":
         id_formax = []
-        fieldnames = ["id", "story_title", "user_story", "acceptance_criteria", "bussiness_value", "estimation"]
+        fieldnames = ["id", "story_title", "user_story", "acceptance_criteria", "bussiness_value", "estimation", "status"]
         with open("data.csv", "r") as csv_file:
             csv_reader=csv.DictReader(csv_file)
             for line in csv_reader:
-                id_formax.append(line["id"])
+                id_formax.append (int(line["id"]))
         if (len(id_formax)) == 0:
             temporary1 = request.form.to_dict()
             temporary1["id"] = (str(0))
-            print(temporary1)
             with open("data.csv", "a") as csv_file:
                 csv_reader = csv.DictWriter(csv_file, fieldnames)
                 csv_reader.writerow(temporary1)
         else:
-            actuel_id = ((int((max(id_formax))))+1)
+            actuel_id = (((max(id_formax)))+1)
             temporary1 = request.form.to_dict()
             temporary1["id"] = (str(actuel_id))
-            print(temporary1)
             with open("data.csv", "a") as csv_file:
                 csv_reader = csv.DictWriter(csv_file, fieldnames)
                 csv_reader.writerow(temporary1)
         table = get_table_from_file("data.csv")
         del table[0]
         the_len = (len(table))
-        return render_template("list.html", table=table,the_len=the_len)
+        return redirect('/')
     else:
         return  render_template("story.html")
 

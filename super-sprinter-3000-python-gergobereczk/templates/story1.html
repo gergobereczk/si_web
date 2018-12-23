@@ -2,9 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add new user stories</title>
 </head>
+<script>
+$("a").click(function(event) {
+  event.preventDefault();
+//Do your logic here
+});
+</script>
 <body>
+<form action="/story/{{ table[update_number][0] }}" method="POST">
+<h1>Add User Story</h1>
+<p>Story Title:</p>
+<input pattern=".{5,10000}" name="story_title" value="{{ table[update_number][1] }}">
+<p>User Story:</p>
+<textarea rows="4" cols="20" name="user_story">{{ table[update_number][2] }}</textarea>
+<p>Acceptance criteria:</p>
+<textarea rows="4" cols="20" name="acceptance_criteria">{{ table[update_number][3] }}</textarea>
+<p>Business Value:</p>
+<input name="bussiness_value" type="number" size="5" min="100" max="1500" step="100" value="{{ table[update_number][4] }}">
+    <p>Estimation:</p>
+<input name="estimation" type="number" size="5" min="0.5" max="40" step="0.5" value="{{ table[update_number][5] }}">
+     <p>Status:</p>
+    <select name="status" class="form-control" id="sel1">
+        <option>Planning</option>
+        <option>To do</option>
+        <option>in progress</option>
+        <option>review</option>
+          <option>done</option>
+      </select>
 
+<p><input type="submit" value="Add new User Story "></p>
+</form>
 </body>
 </html>
